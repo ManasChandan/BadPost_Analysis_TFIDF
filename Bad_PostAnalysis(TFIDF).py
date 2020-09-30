@@ -98,3 +98,10 @@ test_data.head()
 corpus_test = prepare_corpus(test_data)
 vectors = tfidf.transform(corpus_test).toarray()
 
+answer = ml_model_final.predict(vectors)
+print(answer)
+
+answer.shape
+
+ones = [ans for ans in answer if ans==1]
+len(ones)
