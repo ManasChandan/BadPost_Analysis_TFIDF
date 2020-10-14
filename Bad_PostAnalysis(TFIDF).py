@@ -73,3 +73,35 @@ nb_idf.fit(X_train_idf , y_train_idf)
 nb_idf_accuracy = accuracy_check(nb_idf , X_test_idf , y_test_idf)
 print(nb_idf_accuracy)
 
+def optimization_idf(X_train_idf , X_test_idf , y_train_idf , y_test_idf):
+  best_accuracy = 0.0
+  alpha_val = 0.0
+  for i in np.arange(0.1,1.1,0.1):
+    temp_classifier = MultinomialNB(alpha=i)
+    temp_classifier.fit(X_train_idf, y_train_idf)
+    temp_y_pred = temp_classifier.predict(X_test_idf)
+    score = accuracy_score(y_test_idf, temp_y_pred)
+    print("Accuracy score for alpha={} is: {}%".format(round(i,1), round(score*100,2)))
+    if score>best_accuracy:
+      best_accuracy = score
+      alpha_val = i
+  print('The best accuracy is {}% with alpha value as {}'.format(round(best_accuracy*100, 2), round(alpha_val,1)))
+  return alpha_val
+
+optimal_value_idf = optimization_idf(X_train_idf , X_test_idf , y_train_idf , y_test_idf)
+
+ml_model_final = MultinomialNB(alpha = optimal_value_idf)
+ml_model_final.fit(X_tfidf , y_ifidf)
+
+test_data.head()
+
+corpus_test = prepare_corpus(test_data)
+vectors = tfidf.transform(corpus_test).toarray()
+
+answer = ml_model_final.predict(vectors)
+print(answer)
+
+answer.shape
+
+ones = [ans for ans in answer if ans==1]
+len(ones)
